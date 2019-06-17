@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <list>
 
 using namespace std;
 
@@ -139,8 +140,8 @@ public:
 
 	string syntax[syntaxSize];
 
-	string waitingVarsStr[1];
-	int waitingVarsInt[1];
+	list<string> waitingVarsStr;
+	list<int> waitingVarsInt;
 
 	void checkText(const char* text)
 	{

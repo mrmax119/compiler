@@ -12,9 +12,6 @@ TextChecker::TextChecker()
 	syntax[5] = "=";
 	syntax[6] = "==";
 	syntax[7] = ";";
-
-	waitingVarsStr[0] = "e";
-	waitingVarsInt[0] = 100;
 }
 
 
@@ -85,11 +82,14 @@ void TextChecker::onVar(const char *&text)
 		}
 		else if (!isdigit(atoi(value.c_str())))
 		{
-			for (size_t i = 0; i < 1; i++)
+			list<string>::iterator itStr;
+			list<int>::iterator itInt;
+
+			for (itStr = waitingVarsStr.begin(), itInt = waitingVarsInt.begin(); itStr != waitingVarsStr.end(); itStr++, itInt++)
 			{
-				if (value == waitingVarsStr[i])
+				if (value == *itStr)
 				{
-					value = std::to_string(waitingVarsInt[i]);
+					value = std::to_string(*itInt);
 					break;
 				}
 			}
@@ -103,6 +103,8 @@ void TextChecker::onVar(const char *&text)
 	}
 	//todo:Variable table to keep all variables
 }
+
+// Macros = Define
 
 void TextChecker::onMacros(const char *& text)
 {
@@ -134,6 +136,9 @@ void TextChecker::onMacros(const char *& text)
 		*text++;
 	}
 
+	waitingVarsStr.push_back(name);
+	waitingVarsInt.push_back(atoi(value.c_str()));
+
 	/**text++;
 	*text++;*/
 
@@ -160,11 +165,15 @@ void setNum(string &str, const char *&text)
 
 void TextChecker::checkDef(string &num)
 {
-	for (size_t i = 0; i < 1; i++)
+
+	list<string>::iterator itStr;
+	list<int>::iterator itInt;
+
+	for (itStr = waitingVarsStr.begin(), itInt = waitingVarsInt.begin(); itStr != waitingVarsStr.end(); itStr++, itInt++)
 	{
-		if (num == waitingVarsStr[i])
+		if (num == *itStr)
 		{
-			num = std::to_string(waitingVarsInt[i]);
+			num = std::to_string(*itInt);
 			break;
 		}
 	}
@@ -177,7 +186,7 @@ void TextChecker::onIf(const char *& text)
 
 	while (*text == ' ') *text++;
 
-	cout << *text << endl;
+	cout << *text;
 
 	*text++;
 
@@ -217,20 +226,99 @@ void TextChecker::onIf(const char *& text)
 	//}
 
 
-	cout << firstNum << endl;
-	cout << secondNum << endl;
+	cout << firstNum << " == ";
+	cout << secondNum << " is ";
+
+	bool isTrue = false;
 
 	if (sign == "=")
 	{
-		if (atoi(firstNum.c_str()) == atoi(secondNum.c_str()))
+		if (firstNum == secondNum)
 		{
-			cout << "true" << endl;
+			cout << "true";
+			isTrue = true;
 		}
 		else
 		{
-			cout << "false" << endl;
+			cout << "false";
+			isTrue = false;
 		}
+
+		cout << ")" << endl << "{" << endl;
 	}
 
+	char s;
+	s = *text;
+	while (s == ' ' || s == '\n' || s == '\t')
+	{
+		*text++;
+		s = *text;
+	}
+
+	while (*text == '{') *text++;
+	
+	char s2;
+	s2 = *text;
+	while (s2 == ' ' || s2 == '\n' || s2 == '\t')
+	{
+		*text++;
+		s2 = *text;
+	}
+
+	//*text++;
+
+	string name2 = "";
+
+	while (isalpha(*text))
+	{
+		name2 += *text;
+		*text++;
+	}
+
+	//cout << *text << endl;
+
+	s = *text;
+
+	while (s == ' ')
+	{
+		*text++;
+		s = *text;
+	}
+
+	string oper = "";
+
+	while (s != ';')
+	{
+		oper += s;
+		*text++;
+		s = *text;
+	}
+
+	cout << name2 << endl << oper << endl;
+
+	*text++;
+
+	while (*text == ' ') *text++;
+
+	s = *text;
+	while (s == ' ' || s == '\n' || s == '\t')
+	{
+		*text++;
+		s = *text;
+	}
+
+	while (*text == ' ') *text++;
+
+	while (*text != '}') *text++;
+
+	*text++;
+
+	if (isTrue)
+	{
+		if (oper == "+")
+		{
+			//as ++
+		}
+	}
 }
 
