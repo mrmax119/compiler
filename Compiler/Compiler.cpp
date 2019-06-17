@@ -3,17 +3,18 @@
 
 #include "pch.h"
 #include "TextChecker.h"
+#include "MyString.h"
 
 const char txt[] =
 {
 	"\
-	#define e 0\n\
+	#define b 10\n\
 	int fg = 2 + 2;\n\
-	float gf = e;\n\
+	float gf = b;\n\
 	int h = 134;\n\
-	if(e = 0)\n\
+	if(b = 10)\n\
 	{\n\
-		a++;\n\
+		h+;\n\
 	}\n\
 	\n"
 };
@@ -42,6 +43,19 @@ int main()
 	TextChecker tc;
 	tc.checkText(txt);
 
-	//system("pause");
+	//MyString ms = (char*)"sad";
+	//const char* s = "str";
+	//const char* ss = (char*)"ret";
+	//ms.concat(s, ss);
+	//cout << ms.data << endl;
+
+	//ms = (char*)"gt";
+
+	//cout << ms.data << endl;
+	//cout << ms << endl;
+
+	//free(ms.data);
+		
+	system("pause");
 	return 0;
 }
